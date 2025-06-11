@@ -1,15 +1,12 @@
-// server.js
-
 "use strict";
 
-import "dotenv/config"; // Cara import dotenv yang lebih modern
+import "dotenv/config";
 import Hapi from "@hapi/hapi";
 import Jwt from "@hapi/jwt";
 import connectDB from "./src/config/database.js";
-import routes from "./src/routes/index.js"; // FIX: Menambahkan /index.js
+import routes from "./src/routes/index.js";
 
 const init = async () => {
-  // 1. Hubungkan ke Database
   await connectDB();
 
   const server = Hapi.server({
@@ -22,10 +19,8 @@ const init = async () => {
     },
   });
 
-  // 2. Daftarkan Plugin JWT
   await server.register(Jwt);
 
-  // 3. Definisikan Strategi Otentikasi JWT
   server.auth.strategy("jwt", "jwt", {
     keys: process.env.JWT_SECRET,
     verify: {
@@ -34,7 +29,7 @@ const init = async () => {
       sub: false,
       nbf: true,
       exp: true,
-      maxAgeSec: 14400, // 4 hours
+      maxAgeSec: 14400,
     },
     validate: (artifacts, request, h) => {
       return {
@@ -44,12 +39,10 @@ const init = async () => {
     },
   });
 
-  // Helper untuk membuat token
   server.method("jwtSign", (payload) =>
     Jwt.token.generate(payload, { key: process.env.JWT_SECRET })
   );
 
-  // 4. Daftarkan semua rute
   server.route(routes);
 
   await server.start();
