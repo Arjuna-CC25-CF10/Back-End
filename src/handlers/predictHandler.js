@@ -1,9 +1,7 @@
-// src/handlers/predictHandler.js
-
 import axios from "axios";
 import FormData from "form-data";
-import Wayang from "../models/wayangModel.js"; // FIX: Import default Wayang
-import User from "../models/userModel.js"; // FIX: Import default User
+import Wayang from "../models/wayangModel.js";
+import User from "../models/userModel.js";
 
 const FLASK_API_URL = process.env.FLASK_API_URL;
 
@@ -26,7 +24,6 @@ const predictWayang = async (request, h) => {
     const predictionResult = flaskResponse.data.data[0];
     const predictedLabel = predictionResult.label;
     const wayangInfo = await Wayang.findOne({
-      // FIX: Panggil Wayang.findOne
       nama_karakter: { $regex: new RegExp(`^${predictedLabel}$`, "i") },
     }).lean();
     if (!wayangInfo) {
@@ -40,7 +37,7 @@ const predictWayang = async (request, h) => {
     }
     if (request.auth.isAuthenticated) {
       const userId = request.auth.credentials.id;
-      const user = await User.findById(userId); // FIX: Panggil User.findById
+      const user = await User.findById(userId);
       if (user && !user.koleksi.includes(wayangInfo._id)) {
         user.koleksi.push(wayangInfo._id);
         user.jumlah_koleksi = user.koleksi.length;

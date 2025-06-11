@@ -1,7 +1,5 @@
-// src/routes/index.js
-
-import userHandler from "../handlers/userHandler.js"; // FIX: Import default
-import predictHandler from "../handlers/predictHandler.js"; // FIX: Import default
+import userHandler from "../handlers/userHandler.js";
+import predictHandler from "../handlers/predictHandler.js";
 import wayangHandler from "../handlers/wayangHandler.js";
 
 const routes = [
@@ -15,19 +13,19 @@ const routes = [
   {
     method: "POST",
     path: "/register",
-    handler: userHandler.registerUser, // FIX: Panggil sebagai method dari objek
+    handler: userHandler.registerUser,
     options: { auth: false },
   },
   {
     method: "POST",
     path: "/login",
-    handler: userHandler.loginUser, // FIX: Panggil sebagai method dari objek
+    handler: userHandler.loginUser,
     options: { auth: false },
   },
   {
     method: "GET",
     path: "/profile",
-    handler: userHandler.getUserProfile, // FIX: Panggil sebagai method dari objek
+    handler: userHandler.getUserProfile,
     options: {
       auth: "jwt",
     },
@@ -35,7 +33,7 @@ const routes = [
   {
     method: "POST",
     path: "/predict",
-    handler: predictHandler.predictWayang, // FIX: Panggil sebagai method dari objek
+    handler: predictHandler.predictWayang,
     options: {
       auth: {
         strategy: "jwt",
@@ -55,7 +53,7 @@ const routes = [
     handler: wayangHandler.getWayangQuestions,
     options: {
       auth: "jwt",
-    }, // FIX: Panggil sebagai method dari objek
+    }, 
   },
 ];
 

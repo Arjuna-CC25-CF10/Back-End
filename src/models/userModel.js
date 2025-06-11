@@ -1,7 +1,5 @@
-// src/models/userModel.js
-
 import { Schema, model } from "mongoose";
-import bcrypt from "bcrypt"; // FIX: Import dari 'bcrypt' bukan 'bcryptjs'
+import bcrypt from "bcrypt";
 
 const userSchema = new Schema(
   {
@@ -23,7 +21,6 @@ const userSchema = new Schema(
       required: true,
     },
     jumlah_koleksi: {
-      // Anda menamainya 'jumlah_koleksi' di kode awal
       type: Number,
       default: 0,
     },
@@ -45,13 +42,13 @@ userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
     return next();
   }
-  const salt = await bcrypt.genSalt(10); // FIX: Panggil bcrypt.genSalt
-  this.password = await bcrypt.hash(this.password, salt); // FIX: Panggil bcrypt.hash
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
   next();
 });
 
 userSchema.methods.matchPassword = async function (enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password); // FIX: Panggil bcrypt.compare
+  return await bcrypt.compare(enteredPassword, this.password);
 };
 
 const User = model("User", userSchema, "user");

@@ -1,11 +1,9 @@
-// src/handlers/userHandler.js
-
-import User from "../models/userModel.js"; // FIX: Import default User
+import User from "../models/userModel.js";
 
 const registerUser = async (request, h) => {
   try {
     const { username, email, password } = request.payload;
-    const userExists = await User.findOne({ $or: [{ email }, { username }] }); // FIX: Panggil User.findOne
+    const userExists = await User.findOne({ $or: [{ email }, { username }] });
     if (userExists) {
       return h
         .response({
@@ -30,7 +28,7 @@ const registerUser = async (request, h) => {
 const loginUser = async (request, h) => {
   try {
     const { email, password } = request.payload;
-    const user = await User.findOne({ email }); // FIX: Panggil User.findOne
+    const user = await User.findOne({ email });
     if (user && (await user.matchPassword(password))) {
       const token = request.server.methods.jwtSign({
         id: user._id,
@@ -55,8 +53,8 @@ const getUserProfile = async (request, h) => {
   try {
     const userId = request.auth.credentials.id;
     const user = await User.findById(userId)
-      .select("-password -__v") // Exclude password and __v field
-      .populate("koleksi"); // Populate koleksi with specific fields
+      .select("-password -__v")
+      .populate("koleksi");
 
     if (user) {
       return h.response({
@@ -67,7 +65,7 @@ const getUserProfile = async (request, h) => {
           email: user.email,
           jumlah_koleksi: user.jumlah_koleksi,
           jumlah_mandala: user.jumlah_mandala,
-          koleksi: user.koleksi, // Include populated koleksi
+          koleksi: user.koleksi,
         },
       });
     } else {
